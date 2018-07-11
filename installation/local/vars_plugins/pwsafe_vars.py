@@ -1,6 +1,11 @@
 import os
 
-from pwsafe.comp import PasswordSafeComp
+try:
+    from pwsafe.comp import PasswordSafeComp
+    _pwsafe_found = True
+except ImportError:
+    _pwsafe_found = False
+
 from ansible.plugins.vars import BaseVarsPlugin
 
 __metaclass__ = type
@@ -33,6 +38,9 @@ class VarsModule(BaseVarsPlugin):
             safe to assume that we can just return the single result if we
             have a cache hit. This way we only hit the API once.
         '''
+        # Return early if unable to import pwsafe
+        if not _pwsafe_found:
+            return {}
 
         if PWSAFE_CACHE["run"] is True and cache is True:
             return PWSAFE_CACHE["data"]
