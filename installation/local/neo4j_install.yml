@@ -4,8 +4,10 @@
     crypt_backing_device: "{{ neo4j_crypt_backing_device }}"
     crypt_mount_point: "{{ neo4j_home }}"
     crypt_disk_password: "{{ pwsafe_neo4j_disk_password }}"
-  roles:
-    - crypt
+  tasks:
+    - include_role:
+        name: crypt
+      when: neo4j_crypt_enabled
   tags:
     - crypt
 
