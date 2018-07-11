@@ -11,6 +11,7 @@
     name: "{{ git_python }}"
     version: "{{ git_python_version }}"
     extra_args: --isolated
+    virtualenv: "{{ ansible_venv }}"
 
 - name: Create Directories
   become: yes
