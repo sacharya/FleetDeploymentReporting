@@ -23,6 +23,36 @@ angular.module('cloudSnitch').factory('csrfService', [function() {
     return service;
 }]);
 
+
+angular.module('cloudSnitch').factory('authInterceptor', ['$q', '$window', function($q, $window) {
+
+    function logout() {
+        $window.location.href = '/web/logout';
+    }
+
+    return {
+        responseError: function(rejection) {
+            if (rejection.status === 401) {
+                logout();
+            }
+
+            if (rejection.status === 403) {
+                var detail = ((rejection || {}).data || {}).detail;
+                if (angular.isDefined(detail) && detail == 'Authentication credentials were not provided.') {
+                    logout();
+                }
+            }
+        }
+    }
+}]);
+
+
+// Add interceptor to http provider
+angular.module('cloudSnitch').config(['$httpProvider', function($httpProvider) {
+    $httpProvider.interceptors.push('authInterceptor');
+}]);
+
+
 angular.module('cloudSnitch').factory('cloudSnitchApi', ['$http', '$q', 'timeService', 'csrfService', function($http, $q, timeService, csrfService) {
 
     var typesDeferred = $q.defer();
