@@ -41,17 +41,15 @@
       </div>
 
       <div class="hxRow" ng-if="paneObj.search.filters.length > 0">
-        <div class="hxSpan-2">Type</div>
+        <div class="hxSpan-3 hxBox-xs"><label>Type</label></div>
+        <div class="hxSpan-3 hxBox-xs"><label>Property</label></div>
+        <div class="hxSpan-2 hxBox-xs"><label>Operator</label></div>
+        <div class="hxSpan-3 hxBox-xs"><label>Value</label></div>
         <div class="hxSpan-1"></div>
-        <div class="hxSpan-2">Property</div>
-        <div class="hxSpan-1"></div>
-        <div class="hxSpan-2">Operator</div>
-        <div class="hxSpan-1"></div>
-        <div class="hxSpan-2">Value</div>
       </div>
 
       <div class="hxRow" ng-repeat="filter in paneObj.search.filters" ng-form="f">
-        <div class="hxSpan-2 hxBox-xs">
+        <div class="hxSpan-3 hxBox-xs">
           <div>
             <select class="hxTextCtrl" name="model" ng-model="filter.model" ng-required="true">
               <option ng-repeat="type in path" value="{{type}}">{{type}}</option>
@@ -63,8 +61,7 @@
             </div>
           </div>
         </div>
-        <div class="hxSpan-1"></div>
-        <div class="hxSpan-2 hxBox-xs">
+        <div class="hxSpan-3 hxBox-xs">
           <div>
             <select class="hxTextCtrl" name="property" ng-model="filter.property" ng-required="true">
               <option ng-repeat="property in typesService.properties[filter.model]" value="{{property}}">{{property}}</option>
@@ -76,9 +73,6 @@
             </div>
           </div>
         </div>
-
-        <div class="hxSpan-1"></div>
-
         <div class="hxSpan-2 hxBox-xs">
           <div>
             <select class="hxTextCtrl" name="operator" ng-model="filter.operator" ng-required="true">
@@ -86,10 +80,7 @@
             </select>
           </div>
         </div>
-
-        <div class="hxSpan-1"></div>
-
-        <div class="hxSpan-2 hxBox-xs">
+        <div class="hxSpan-3 hxBox-xs">
           <div>
             <input class="hxTextCtrl" name="filterValue" ng-model="filter.value" ng-required="true" ng-maxlength="256" />
           </div>
@@ -103,10 +94,9 @@
             </div>
           </div>
         </div>
-
-        <div class="">
+        <div class="hxSpan-1 hxBox-xs">
           <div class="close-outer">
-              <button class="hxBtn hxLink" ng-click="removeFilter(filter)"><hx-icon type="times"></hx-icon></button>
+            <button type="button" class="hxBtn hxLink" ng-click="removeFilter(filter)"><hx-icon type="times"></hx-icon></button>
           </div>
         </div>
       </div><!-- hxRow -->
@@ -114,7 +104,7 @@
   </div><!-- hxRow -->
 
   <div class="hxRow">
-    <div class="hxCol">
+    <div class="hxSpan-12 hxBox-sm">
       <button class="hxBtn" ng-click="searchForm.$valid && addFilter()">Add Filter</button>
       <button class="hxBtn hxPrimary" ng-click="searchForm.$valid && search()">Search</button>
     </div>
