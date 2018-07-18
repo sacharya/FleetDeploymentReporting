@@ -23,17 +23,17 @@ class TestCacheKey(TestCase):
 
     def test_default(self):
         key = cache_key(self.args, self.kwargs)
-        expected = b'LSgxLCAyLCAzKS1bKCdrZXkxJywgJ3ZhbDEnKSwgKCdrZXkyJywgJ3ZhbDInKSwgKCdrZXkzJywgJ3ZhbDMnKV0=' # noqa E501
+        expected = b'LSgxLCAyLCAzKS1bKCdrZXkxJywgJ3ZhbDEnKSwgKCdrZXkyJywgJ3ZhbDInKSwgKCdrZXkzJywgJ3ZhbDMnKV0='  # noqa E501
         self.assertEquals(key, expected)
 
     def test_prefix(self):
         key = cache_key(self.args, self.kwargs, prefix='test_prefix_123')
-        expected = b'dGVzdF9wcmVmaXhfMTIzLSgxLCAyLCAzKS1bKCdrZXkxJywgJ3ZhbDEnKSwgKCdrZXkyJywgJ3ZhbDInKSwgKCdrZXkzJywgJ3ZhbDMnKV0=' # noqa E501
+        expected = b'dGVzdF9wcmVmaXhfMTIzLSgxLCAyLCAzKS1bKCdrZXkxJywgJ3ZhbDEnKSwgKCdrZXkyJywgJ3ZhbDInKSwgKCdrZXkzJywgJ3ZhbDMnKV0='  # noqa E501
         self.assertEquals(key, expected)
 
     def test_non_zero_index(self):
         key = cache_key(self.args, self.kwargs, index=1)
-        expected = b'LSgyLCAzKS1bKCdrZXkxJywgJ3ZhbDEnKSwgKCdrZXkyJywgJ3ZhbDInKSwgKCdrZXkzJywgJ3ZhbDMnKV0=' # noqa E501
+        expected = b'LSgyLCAzKS1bKCdrZXkxJywgJ3ZhbDEnKSwgKCdrZXkyJywgJ3ZhbDInKSwgKCdrZXkzJywgJ3ZhbDMnKV0='  # noqa E501
         self.assertEquals(key, expected)
 
 
