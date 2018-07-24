@@ -1,4 +1,8 @@
 ---
+- name: Make sure git installed
+  apt:
+    name: git
+
 - name: Install python-pip
   apt:
     name: python-pip
