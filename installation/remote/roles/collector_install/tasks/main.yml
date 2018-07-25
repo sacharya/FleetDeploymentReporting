@@ -1,4 +1,8 @@
 ---
+- name: Get Openstack Release Data
+  openstack_release:
+  register: osa_details
+
 - name: Clone cloud_snitch git repo
   become: yes
   git:
@@ -12,6 +16,15 @@
     version: "{{ git_python_version }}"
     extra_args: --isolated
     virtualenv: "{{ ansible_venv }}"
+  when: osa_details.major_release and osa_details.major_release >= 14
+
+- name: Install GitPython into default python environment
+  become: yes
+  pip:
+    name: "{{ git_python }}"
+    version: "{{ git_python_version }}"
+    extra_args: --isolated
+  when: osa_details.major_release and osa_details.major_release < 14
 
 - name: Create Directories
   become: yes
