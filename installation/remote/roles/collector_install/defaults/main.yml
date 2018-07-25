@@ -1,5 +1,5 @@
 ---
-ansible_venv: /opt/ansible_runtime
+ansible_venv: /opt/ansible-runtime
 
 git_python: GitPython
 git_python_version: 2.1.8
