@@ -1,6 +1,7 @@
 #!/usr/bin/python
 
 import glob
+import hashlib
 import re
 import StringIO
 
@@ -58,10 +59,31 @@ URL_EXP = re.compile('{}{}{}'.format(left, op, right))
 
 
 MAX_FILE_SIZE = 1024 * 16
+CHUNK_SIZE = 4096
 
 
 class FileTooLargeError(Exception):
     pass
+
+
+def is_file_binary(filename):
+    """Return true if the file is considered a binary.
+    If the beginning of the file contains a null byte, the file is
+    considered a binary file.
+    """
+    with open(filename, 'rt') as f:  # try open file in text mode
+        chunk=f.read(CHUNK_SIZE)
+        if b'\x00' in chunk:
+            return True
+    return False
+
+
+def md5(filename):
+    hash_md5 = hashlib.md5()
+    with open(filename, "rb") as f:
+        for chunk in iter(lambda: f.read(CHUNK_SIZE), b""):
+            hash_md5.update(chunk)
+    return hash_md5.hexdigest()
 
 
 def redact(part):
@@ -150,8 +172,15 @@ def run_module():
         filenames += glob.glob(t)
 
     for filename in filenames:
+        result['payload'][filename] = {}
         try:
-            result['payload'][filename] = get_file(filename)
+            if is_file_binary(filename):
+                result['payload'][filename]['contents'] = ''
+                result['payload'][filename]['is_binary'] = 'true'
+            else:
+                result['payload'][filename]['contents'] = get_file(filename)
+                result['payload'][filename]['is_binary'] = 'false'
+            result['payload'][filename]['md5'] = md5(filename)
         except IOError:
             pass
         except FileTooLargeError:
