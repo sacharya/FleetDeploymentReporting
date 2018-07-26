@@ -28,6 +28,8 @@
   command: "{{ cloud_snitch_sync_venv }}/bin/cloud-snitch-sync --concurrency {{ cloud_snitch_sync_concurrency }}"
   tags:
     - sync
+  async: "{{ cloud_snitch_sync_timeout }}"
+  poll: "{{ cloud_snitch_sync_poll }}"
 
 - name: Run cloud-snitch-clean
   command: "{{ cloud_snitch_sync_venv }}/bin/cloud-snitch-clean"
