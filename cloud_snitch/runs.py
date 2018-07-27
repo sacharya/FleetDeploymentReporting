@@ -161,9 +161,16 @@ def find_runs():
                 except RunInvalidError:
                     continue
 
-    # Sort runs be completed timestamp
-    runs = sorted(runs, key=lambda r: r.completed)
-    return runs
+    # Exclude runs that are incomplete
+    filtered = []
+    for run in runs:
+        if run.completed is None:
+            logger.warn('Found incomplete run at {}'.format(run.path))
+            continue
+        filtered.append(run)
+
+    # Sort runs by completed timestamp
+    return sorted(filtered, key=lambda r: r.completed)
 
 
 def set_current(run):
