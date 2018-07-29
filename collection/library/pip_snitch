@@ -45,13 +45,27 @@ doctype:
     type: str
 '''
 
-FIND_VIRTUALENVS = [
-    'find',
+FIND_TARGETS = [
     '/',
+    '/openstack'
+]
+
+FIND_OPTIONS = [
+    '-mount',
     '-not', '-path', '/var/lib/lxc/*',
     '-not', '-path', '*/local/bin/*',
     '-regex', '.*/bin/python'
 ]
+
+
+def find_gen():
+    """Generates find subprocess command.
+
+    :yeilds: List of subprocess command arguments.
+    :ytype: list
+    """
+    for target in FIND_TARGETS:
+        yield ['find', target] + FIND_OPTIONS
 
 
 def parse_pips(data):
@@ -182,15 +196,20 @@ def run_module():
         supports_check_mode=True
     )
 
+    pips = set()
     # Find virtual environments
-    try:
-        venv_out = subprocess.check_output(FIND_VIRTUALENVS)
-    except subprocess.CalledProcessError as e:
-        venv_out = e.output
+    for find in find_gen():
+        try:
+            out = subprocess.check_output(find)
+        except subprocess.CalledProcessError as e:
+            out = e.output
 
+        parsed_pips = set(parse_pips(out))
+        pips = pips | parsed_pips
+
+    # Run pip list on every virtual environment
     try:
-        pips = parse_pips(venv_out)
-        result['payload'] = pips_list(pips)
+        result['payload'].update(pips_list(list(pips)))
     except Exception:
         module.fail_json(msg="Unable to collect python pkg information.")
 
