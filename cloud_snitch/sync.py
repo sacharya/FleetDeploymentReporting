@@ -23,6 +23,7 @@ from cloud_snitch.snitchers.uservars import UservarsSnitcher
 from cloud_snitch import runs
 from cloud_snitch import utils
 from cloud_snitch.driver import DriverContext
+from cloud_snitch.exc import EnvironmentLockedError
 from cloud_snitch.exc import RunInvalidStatusError
 from cloud_snitch.exc import RunAlreadySyncedError
 from cloud_snitch.exc import RunContainsOldDataError
@@ -72,6 +73,11 @@ def check_run_time(driver, run):
 
 
 def consume(driver, run):
+    """Consumes data in a run.
+
+    :param run: Run to consume
+    :type run: runs.Run
+    """
     snitchers = [
         EnvironmentSnitcher(driver, run),
         GitSnitcher(driver, run),
@@ -81,34 +87,53 @@ def consume(driver, run):
         AptSnitcher(driver, run),
         UservarsSnitcher(driver, run)
     ]
-
     for snitcher in snitchers:
         snitcher.snitch()
 
 
-def sync(paths):
+def sync_run(driver, run):
+    """Syncs an individuals run.
+
+    :param run: Run to sync
+    :type run: runs.Run
+    """
+    try:
+        check_run_time(driver, run)
+        run.start()
+        logger.info("Starting collection on {}".format(run.path))
+        consume(driver, run)
+        logger.info("Run completion time: {}".format(
+            utils.milliseconds(run.completed)
+        ))
+        run.finish()
+    except RunAlreadySyncedError as e:
+        logger.info(e)
+    except RunInvalidStatusError as e:
+        logger.info(e)
+    except RunContainsOldDataError as e:
+        logger.info(e)
+    except Exception:
+        logger.exception('Unable to complete run.')
+    run.error()
+
+
+def sync_paths(paths):
+    """Sync all runs indicated by paths.
+
+    :param paths: list of paths indicating runs.
+    :type paths: list
+    """
+    # Start a neo4j driver context.
     with DriverContext() as driver:
         for path in paths:
             run = runs.Run(path)
-            with lock_environment(driver, run):
-                try:
-                    check_run_time(driver, run)
-                    run.start()
-                    logger.info("Starting collection on {}".format(run.path))
-                    consume(driver, run)
-                    logger.info("Run completion time: {}".format(
-                        utils.milliseconds(run.completed)
-                    ))
-                    run.finish()
-                except RunAlreadySyncedError as e:
-                    logger.info(e)
-                except RunInvalidStatusError as e:
-                    logger.info(e)
-                except RunContainsOldDataError as e:
-                    logger.info(e)
-                except Exception:
-                    logger.exception('Unable to complete run.')
-                    run.error()
+            # Try to acquire environment lock.
+            # @TODO - Implement wait until timeout loop.
+            try:
+                with lock_environment(driver, run):
+                    sync_run(driver, run)
+            except EnvironmentLockedError as e:
+                logger.error(e)
 
 
 def sort_key(item):
@@ -153,7 +178,7 @@ def main():
         future_to_sync = set()
         for _, group in groupby(foundruns, groupby_key):
             paths = [r.path for r in group]
-            future_to_sync.add(executor.submit(sync, paths))
+            future_to_sync.add(executor.submit(sync_paths, paths))
 
         for future in as_completed(future_to_sync):
             try:
