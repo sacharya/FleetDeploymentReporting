@@ -45,18 +45,16 @@ class ConfigfileSnitcher(BaseSnitcher):
 
         # Iterate over configration files in the host's directory
         configfiles = []
-        for filename, contents in configdata.items():
+        for filename, metadata in configdata.items():
             _, name = os.path.split(filename)
-            md5 = hashlib.md5()
-            md5.update(contents.encode('utf-8'))
-            md5 = md5.hexdigest()
 
             # Update configfile node
             configfile = ConfigfileEntity(
                 path=filename,
                 host=host.identity,
-                md5=md5,
-                contents=contents,
+                md5=metadata.get('md5'),
+                contents=metadata.get('contents'),
+                is_binary=metadata.get('is_binary'),
                 name=name
             )
             configfile.update(session, self.time_in_ms)

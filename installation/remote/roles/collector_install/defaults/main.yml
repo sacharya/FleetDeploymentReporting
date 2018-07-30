@@ -292,3 +292,4 @@ cloud_snitch_file_list:
   - '/var/www/repo/os-releases/*/requirements_constraints.txt'
   - '/var/www/repo/os-releases/*/venv-build-options-*.txt'
   - '/var/www/repo/repo_prepost_cmd.sh'
+  - '/usr/bin/python2.7'
