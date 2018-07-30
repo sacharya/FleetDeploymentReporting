@@ -12,3 +12,6 @@ cloud_snitch_inventory_locations:
 
 cloud_snitch_collection_timeout: 1800
 cloud_snitch_collection_poll: 30
+
+cloud_snitch_default_forks: "{{ [ansible_processor_vcpus - 2, 8]| max }}"
+cloud_snitch_forks: "{{ cloud_snitch_default_forks }}"
