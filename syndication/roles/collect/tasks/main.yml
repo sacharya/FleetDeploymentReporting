@@ -5,7 +5,7 @@
 
 - name: Run snitch collector - Newton +
   become: yes
-  command: "openstack-ansible snitch.yml"
+  command: "openstack-ansible snitch.yml --forks {{ cloud_snitch_forks }}"
   environment:
     CLOUD_SNITCH_ENABLED: true
     CLOUD_SNITCH_CONF_FILE: "{{ cloud_snitch_conf_file }}"
@@ -24,7 +24,7 @@
 
 - name: Run snitch collector - Mitaka -
   become: yes
-  command: "openstack-ansible snitch.yml"
+  command: "openstack-ansible snitch.yml --forks {{ cloud_snitch_forks }}"
   environment:
     CLOUD_SNITCH_ENABLED: true
     CLOUD_SNITCH_CONF_FILE: "{{ cloud_snitch_conf_file }}"
