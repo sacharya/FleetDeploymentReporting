@@ -1,0 +1,7 @@
+---
+- name: Pip packages
+  pip:
+    name: "{{ item.key }}"
+    version: "{{ item.value }}"
+    virtualenv: "{{ cloud_snitch_web_venv }}"
+  with_dict: "{{ cloudsnitch_test_pip_pkgs }}"
