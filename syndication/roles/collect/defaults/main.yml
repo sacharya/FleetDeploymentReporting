@@ -9,3 +9,9 @@ cloud_snitch_conf_file: "{{ cloud_snitch_conf_dir }}/cloud_snitch.yml"
 cloud_snitch_inventory_locations:
   # - /opt/openstack-ansible/playbooks/inventory/
   - /opt/rpc-openstack/openstack-ansible/playbooks/inventory/
+
+cloud_snitch_collection_timeout: 1800
+cloud_snitch_collection_poll: 30
+
+cloud_snitch_default_forks: "{{ [ansible_processor_vcpus - 2, 8]| max }}"
+cloud_snitch_forks: "{{ cloud_snitch_default_forks }}"

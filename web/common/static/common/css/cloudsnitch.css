@@ -227,7 +227,7 @@ div.diffNodeDetail {
     left: 100px;
     max-width: 1000px;
     border: 1px solid #0c7c84;
-    background-color: #fff;
+    background: rgba(255, 255, 255, 0.5);
 }
 
 div.diffNodeDetail hx-panel {
@@ -314,4 +314,27 @@ div.diffNodeDetail hx-panel {
   background: black;
   color: white;
   border: none;
+}
+
+.node circle {
+  stroke-width: 3px;
+}
+
+.node.unchanged circle {
+  fill: lightsteelblue;
+  stroke: steelblue;
+}
+
+.node.added circle {
+  fill: lightgreen;
+  stroke: limegreen;
+}
+
+.node.removed circle {
+  fill: salmon;
+  stroke: red;
+}
+
+.node circle.empty {
+  fill: #ffffff;
 }

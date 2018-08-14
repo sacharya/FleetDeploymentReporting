@@ -5,7 +5,7 @@
 
 - name: Run snitch collector - Newton +
   become: yes
-  command: "openstack-ansible snitch.yml"
+  command: "openstack-ansible snitch.yml --forks {{ cloud_snitch_forks }}"
   environment:
     CLOUD_SNITCH_ENABLED: true
     CLOUD_SNITCH_CONF_FILE: "{{ cloud_snitch_conf_file }}"
@@ -15,6 +15,8 @@
   tags:
     - collect
   when: osa_details.major_release and osa_details.major_release >= 14
+  async: "{{ cloud_snitch_collection_timeout }}"
+  poll: "{{ cloud_snitch_collection_poll }}"
 
 - name: Debug inventories
   debug:
@@ -22,7 +24,7 @@
 
 - name: Run snitch collector - Mitaka -
   become: yes
-  command: "openstack-ansible snitch.yml"
+  command: "openstack-ansible snitch.yml --forks {{ cloud_snitch_forks }}"
   environment:
     CLOUD_SNITCH_ENABLED: true
     CLOUD_SNITCH_CONF_FILE: "{{ cloud_snitch_conf_file }}"
@@ -35,6 +37,8 @@
   tags:
     - collect
   when: osa_details.major_release and osa_details.major_release < 14
+  async: "{{ cloud_snitch_collection_timeout }}"
+  poll: "{{ cloud_snitch_collection_poll }}"
 
 - name: Find all cloud_snitch data sets
   find:

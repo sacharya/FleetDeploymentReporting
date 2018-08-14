@@ -19,7 +19,8 @@ class ConfigfileEntity(VersionedEntity):
     ]
     state_properties = [
         'md5',
-        'contents'
+        'contents',
+        'is_binary'
     ]
     concat_properties = {
         'path_host': [
