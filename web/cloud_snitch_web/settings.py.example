@@ -209,18 +209,18 @@ LOGGING = {
     }
 }
 
-# LOGIN_URL = '/raxauth/login/' # RAX AUTH
+# LOGIN_URL = '/raxauth/login/' #  RAX AUTH
 LOGIN_URL = '/web/login/' #  DB AUTH
 
 
 LOGIN_REDIRECT_URL = '/web/'
 
-# AUTH_USER_MODEL = 'raxauth.RaxAuthUser' # RAX AUTH
+# AUTH_USER_MODEL = 'raxauth.RaxAuthUser' #  RAX AUTH
 # AUTHENTICATION_BACKENDS = [ # RAX AUTH
-#    'raxauth.backend.RaxAuthBackend' # RAX AUTH
+#    'raxauth.backend.RaxAuthBackend' #  RAX AUTH
 # ] # RAX AUTH
 
-# RAXAUTH_AUTH_URL = 'https://someurl.com' # RAX AUTH
+# RAXAUTH_AUTH_URL = 'https://someurl.com' #  RAX AUTH
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
