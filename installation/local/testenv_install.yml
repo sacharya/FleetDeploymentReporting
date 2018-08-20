@@ -1,11 +1,5 @@
 ---
 - hosts: web
-  roles:
-    - testenv_install
-  tags:
-    - testenv
-
-- hosts: web
   vars:
     cloud_snitch_testenv: True
   roles:
@@ -43,3 +37,8 @@
   roles:
     - sync_install
 
+- hosts: web
+  roles:
+    - testenv_install
+  tags:
+    - testenv
