@@ -2,6 +2,7 @@
 - hosts: web
   vars:
     cloud_snitch_testenv: True
+    cloud_snitch_testenv_source_dir: /vagrant
   roles:
     - web_install
   tags:

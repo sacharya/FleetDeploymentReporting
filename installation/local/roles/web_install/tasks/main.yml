@@ -46,6 +46,29 @@
     version: "{{ cloud_snitch_web_version }}"
   when: not cloud_snitch_testenv
 
+- name: Cloud Snitch Web - Create Repo Dir
+  file:
+    dest: "{{ cloud_snitch_web_repo_dir }}"
+    state: directory
+  when: cloud_snitch_testenv
+
+- name: Cloud Snitch Web - Link Repo for Test
+  file:
+    src: "{{ cloud_snitch_testenv_source_dir }}"
+    dest: "{{ cloud_snitch_web_repo_dir }}"
+    state: link
+    force: True
+  when: cloud_snitch_testenv
+
+- name: Install cloud snitch from source
+  shell: |
+    source {{ cloud_snitch_web_venv }}/bin/activate
+    python setup.py install
+  args:
+    chdir: "{{ cloud_snitch_web_repo_dir }}"
+    executable: /bin/bash
+  when: cloud_snitch_testenv
+
 - name: Cloud Snitch Web - Settings
   template:
     src: settings.py.j2
