@@ -4,6 +4,7 @@ def postActions(buildStatus) {
     switch (buildStatus) {
         case 'SUCCESS':
             sh 'vagrant destroy -f'
+            sh 'git push origin master'
             status = 'is now green'
             break
 
