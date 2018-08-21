@@ -4,6 +4,9 @@ def postActions(buildStatus) {
     switch (buildStatus) {
         case 'SUCCESS':
             sh 'vagrant destroy -f'
+            sh 'git checkout -b working_dev_branch'
+            sh 'git checkout master'
+            sh 'git merge working_dev_branch'
             sh 'git push origin master'
             status = 'is now green'
             break
@@ -43,8 +46,9 @@ pipeline {
                          string(credentialsId: 'RAX_REG', variable: 'RAX_REG'),
                          string(credentialsId: 'RAX_USERNAME', variable: 'RS_USERNAME'),
                          string(credentialsId: 'RAX_API_KEY', variable: 'RS_API_KEY'),]) {
-          sh 'export RS_REGION_NAME=DFW; rack files object download --container cloud-snitch-test-data --name james-newton-aio > neo4j_dump'
-          sh 'vagrant up --provider=rackspace'
+          sh 'git branch; git show'
+          //sh 'export RS_REGION_NAME=DFW; rack files object download --container cloud-snitch-test-data --name james-newton-aio > neo4j_dump'
+          //sh 'vagrant up --provider=rackspace'
         }
       }
     }
