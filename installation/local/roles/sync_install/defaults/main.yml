@@ -18,7 +18,7 @@ cloud_snitch_neo4j_max_retries: 10
 cloud_snitch_sync_venv: '/opt/venvs/cloudsnitch'
 
 cloud_snitch_repo: https://github.com/sacharya/FleetDeploymentReporting.git
-cloud_snitch_version: mtu_snitch
+cloud_snitch_version: delete_account
 
 cloud_snitch_sync_pip_list:
   neo4j-driver: '1.5.3'
